@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700;1,400&display=swap');
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  color: white;
+  background: #312c51;
+}
+
+.p-component {
+  font-family: 'Lato', sans-serif;
+}

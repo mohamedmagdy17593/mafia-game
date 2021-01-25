@@ -1,10 +1,13 @@
-import http from 'http';
-import app from './app';
+import server from './sever';
+
+import './io';
 
 const PORT = process.env.PORT || 4000;
 
-const server = http.createServer(app);
+async function init() {
+  server.listen(PORT, () => {
+    console.log(`listening on *:${PORT}`);
+  });
+}
 
-server.listen(PORT, () => {
-  console.log(`listening on *:${PORT}`);
-});
+init();
