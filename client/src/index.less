@@ -1,27 +1,28 @@
 @import '~antd/dist/antd.dark.less';
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Lobster&family=Architects+Daughter&display=swap');
 
 @font-family: 'Lato', sans-serif;
 
 // Themes override
-@primary-color: #ffd369;
-@error-color: #ff4646;
+@primary-color: #2ed573;
+@primary-color-faded: fade(@primary-color, 40%);
+@error-color: #ff4757;
 @processing-color: @primary-color;
 
-@white: #eeeeee;
+@white: #ffffff;
 @heading-color: @white;
 @text-color-dark: @white;
-@body-background: #222831;
+@body-background: #2f3542;
 @component-background: @body-background;
 @popover-background: @component-background;
 
-@border-color-base: #393e46;
+@border-color-base: #57606f;
 @border-color-split: @border-color-base;
 
 @tooltip-bg: @border-color-base;
 @tooltip-color: @white;
 
-@btn-primary-color: #222831;
+// @btn-primary-color: #222831;
 
 @box-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
   0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -32,5 +33,7 @@
   --border-color-split: @border-color-split;
   --primary-color: @primary-color;
   --box-shadow-base: @box-shadow-base;
+  --white: @white;
   --dim-text-color: fade(@white, 40%);
+  --primary-color-faded: @primary-color-faded;
 }

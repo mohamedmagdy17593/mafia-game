@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from './components/Home';
+import { Switch, Route } from 'react-router-dom';
+import Home from './components/Home/Home';
+import Room from 'components/Room.tsx/Room';
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Switch>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <Switch>
+      <Route path="/" exact>
+        <Home />
+      </Route>
+      <Route path="/room/:roomName" exact>
+        <Room />
+      </Route>
+    </Switch>
   );
 }
 

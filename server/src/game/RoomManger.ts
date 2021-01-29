@@ -6,7 +6,15 @@ class RoomManager {
   constructor() {}
 
   createRoom(name: string) {
-    this.rooms[name] = new Room();
+    let newRoom = new Room(name);
+    this.rooms[name] = newRoom;
+    return newRoom;
+  }
+
+  getRoom(name: string) {
+    if (name in this.rooms) {
+      return this.rooms[name];
+    }
   }
 }
 
