@@ -1,0 +1,36 @@
+@import '~antd/dist/antd.dark.less';
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Lobster&display=swap');
+
+@font-family: 'Lato', sans-serif;
+
+// Themes override
+@primary-color: #ffd369;
+@error-color: #ff4646;
+@processing-color: @primary-color;
+
+@white: #eeeeee;
+@heading-color: @white;
+@text-color-dark: @white;
+@body-background: #222831;
+@component-background: @body-background;
+@popover-background: @component-background;
+
+@border-color-base: #393e46;
+@border-color-split: @border-color-base;
+
+@tooltip-bg: @border-color-base;
+@tooltip-color: @white;
+
+@btn-primary-color: #222831;
+
+@box-shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+// Variables
+:root {
+  --component-background: @component-background;
+  --border-color-split: @border-color-split;
+  --primary-color: @primary-color;
+  --box-shadow-base: @box-shadow-base;
+  --dim-text-color: fade(@white, 40%);
+}
