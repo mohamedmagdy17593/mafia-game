@@ -1,10 +1,10 @@
 import { Server, Socket } from 'socket.io';
-import { Player } from '../game/Player';
 import RoomManger from '../game/RoomManger';
 import {
   isAvatarIndexUniq,
   getClientRoomState,
   getUniqueAvatarIndex,
+  creatPlayer,
 } from '../game/utils';
 import { getRoomName } from '../utils/room';
 
@@ -36,7 +36,7 @@ function roomHandlers(io: Server, socket: Socket) {
       return;
     }
     let newAvatarIndex = getUniqueAvatarIndex(room.players);
-    let player = new Player(userName, newAvatarIndex);
+    let player = creatPlayer({ name: userName, avatarIndex: newAvatarIndex });
     if (!room.adminId) {
       room.adminId = player.id;
     }

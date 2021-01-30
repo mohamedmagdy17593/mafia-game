@@ -6,7 +6,6 @@ function Game() {
   let { me, roomName } = useRoom();
 
   useEffect(() => {
-    console.log('emit game:myRole');
     socket.emit('game:myRole', { roomName, id: me?.id }, (role: string) => {
       console.log({ role });
     });

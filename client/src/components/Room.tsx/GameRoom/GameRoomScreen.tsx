@@ -9,9 +9,9 @@ import StartGameButton from './StartGameButton';
 function GameRoomScreen() {
   let { state } = useRoom();
   let { room } = state;
-  let { state: roomState } = room!;
+  let { gameState } = room!;
 
-  if (roomState === 'IDEL') {
+  if (gameState.state === 'IDLE') {
     return (
       <div>
         <RoomHeader />
@@ -19,7 +19,7 @@ function GameRoomScreen() {
         <StartGameButton />
       </div>
     );
-  } else if (roomState === 'RUNNING') {
+  } else if (gameState.state === 'SLEEP') {
     return (
       <div>
         <RoomHeader />

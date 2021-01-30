@@ -1,14 +1,42 @@
-import { Game } from './Game';
-import { Player } from './Player';
+// import { Game } from './Game';
 
-type RoomState = 'IDEL' | 'RUNNING';
+import { getGamePlayers } from './utils';
+
+export interface Player {
+  id: string;
+  name: string;
+  avatarIndex: number;
+}
+
+export type GamePlayersRoles = 'MAFIA' | 'DOCTOR' | 'OFFICER' | 'CITIZEN';
+
+export interface GamePlayer {
+  id: string;
+  role: GamePlayersRoles;
+  select?: string; // selectPlayer
+}
+
+interface IDLERoom {
+  state: 'IDLE';
+}
+interface SLEEPRoom {
+  state: 'SLEEP';
+  players: GamePlayer[];
+}
+interface AWAKERoom {
+  state: 'AWAKE';
+  players: GamePlayer[];
+}
+type GameRoomState = IDLERoom | SLEEPRoom | AWAKERoom;
 
 export class Room {
   name: string;
   adminId?: string;
   players: Player[] = [];
-  state: RoomState = 'IDEL';
-  game?: Game;
+
+  gameState: GameRoomState = {
+    state: 'IDLE',
+  };
 
   constructor(name: string) {
     this.name = name;
@@ -31,7 +59,11 @@ export class Room {
     if (playersIds.length < 4) {
       return;
     }
-    this.game = new Game(playersIds);
-    this.state = 'RUNNING';
+
+    let gameState: SLEEPRoom = {
+      state: 'SLEEP',
+      players: getGamePlayers(playersIds),
+    };
+    this.gameState = gameState;
   }
 }

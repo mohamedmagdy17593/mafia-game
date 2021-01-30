@@ -59,12 +59,16 @@ function RoomComponent() {
   let { roomName } = useParams<{ roomName: string }>();
 
   useEffect(() => {
-    socket.on('room:state', (room: Room) => {
+    let handler = (room: Room) => {
       if (room.roomName === roomName) {
-        console.log({ room });
+        console.log('room', room);
         dispatch({ type: 'SET_ROOM', room });
       }
-    });
+    };
+    socket.on('room:state', handler);
+    return () => {
+      socket.off('room:state', handler);
+    };
   }, [roomName]);
 
   let me = useMemo(
