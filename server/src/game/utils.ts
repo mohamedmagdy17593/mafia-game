@@ -3,6 +3,8 @@ import { Player } from './Player';
 import { Room } from './Room';
 
 export function getClientRoomState(room: Room) {
+  console.log('room', room);
+
   let roomName = room.name;
 
   let players = room.players.map(player => {
@@ -14,10 +16,23 @@ export function getClientRoomState(room: Room) {
 
   let state = room.state;
 
+  // get game state
+  let gamePlayers =
+    room.game?.players.map(gamePlayer => {
+      let player =
+        room.players.find(player => player.id === gamePlayer.id) ?? {};
+      return player;
+    }) ?? [];
+  let game = {
+    ...room.game,
+    players: gamePlayers,
+  };
+
   return {
     roomName,
     players,
     state,
+    game,
   };
 }
 

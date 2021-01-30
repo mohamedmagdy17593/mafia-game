@@ -19,6 +19,10 @@ interface SelectAvatarPayload {
   avatarIndex: number;
 }
 
+interface GameStartPayload {
+  roomName: string;
+}
+
 function roomHandlers(io: Server, socket: Socket) {
   socket.on('room:create', cb => {
     let roomName = getRoomName();
@@ -60,6 +64,15 @@ function roomHandlers(io: Server, socket: Socket) {
       io.to(roomName).emit('room:state', getClientRoomState(room));
     },
   );
+
+  socket.on('room:gameStart', ({ roomName }: GameStartPayload) => {
+    let room = RoomManger.getRoom(roomName);
+    if (!room) {
+      return;
+    }
+    room.startGame();
+    io.to(roomName).emit('room:state', getClientRoomState(room));
+  });
 }
 
 export default roomHandlers;

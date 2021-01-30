@@ -61,6 +61,7 @@ function RoomComponent() {
   useEffect(() => {
     socket.on('room:state', (room: Room) => {
       if (room.roomName === roomName) {
+        console.log({ room });
         dispatch({ type: 'SET_ROOM', room });
       }
     });

@@ -1,3 +1,5 @@
+import { Game } from './game';
+
 export interface Player {
   id: string;
   name: string;
@@ -11,4 +13,5 @@ export interface Room {
   roomName: string;
   players: Player[];
   state: RoomState;
+  game: Game;
 }
