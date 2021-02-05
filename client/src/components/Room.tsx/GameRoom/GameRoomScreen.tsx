@@ -19,7 +19,7 @@ function GameRoomScreen() {
         <StartGameButton />
       </div>
     );
-  } else if (gameState.state === 'SLEEP') {
+  } else {
     return (
       <div>
         <RoomHeader />
@@ -27,8 +27,6 @@ function GameRoomScreen() {
       </div>
     );
   }
-
-  return null;
 }
 
 export default GameRoomScreen;

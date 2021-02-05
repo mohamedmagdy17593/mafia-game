@@ -5,15 +5,32 @@ export interface Player {
   avatarIndex: number;
 }
 
-interface IDLERoom {
+export interface GamePlayer {
+  id: string;
+  name: string;
+  avatarIndex: number;
+  isDead: boolean;
+}
+
+export interface AwakeGamePlayer extends GamePlayer {
+  select?: string;
+}
+
+export interface IDLERoom {
   state: 'IDLE';
 }
-interface SLEEPRoom {
+
+export interface SLEEPRoom {
   state: 'SLEEP';
+  players: GamePlayer[];
 }
-interface AWAKERoom {
+
+export interface AWAKERoom {
   state: 'AWAKE';
+  players: AwakeGamePlayer[];
+  message: string;
 }
+
 type GameRoomState = IDLERoom | SLEEPRoom | AWAKERoom;
 
 export interface Room {

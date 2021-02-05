@@ -1,6 +1,6 @@
 // import { Game } from './Game';
 
-import { getGamePlayers } from './utils';
+import { getDoctor, getGamePlayers, getMafia, getOfficer } from './utils';
 
 export interface Player {
   id: string;
@@ -13,6 +13,7 @@ export type GamePlayersRoles = 'MAFIA' | 'DOCTOR' | 'OFFICER' | 'CITIZEN';
 export interface GamePlayer {
   id: string;
   role: GamePlayersRoles;
+  isDead: boolean;
   select?: string; // selectPlayer
 }
 
@@ -22,10 +23,12 @@ interface IDLERoom {
 interface SLEEPRoom {
   state: 'SLEEP';
   players: GamePlayer[];
+  message?: string;
 }
 interface AWAKERoom {
   state: 'AWAKE';
   players: GamePlayer[];
+  message: string;
 }
 type GameRoomState = IDLERoom | SLEEPRoom | AWAKERoom;
 
@@ -65,5 +68,67 @@ export class Room {
       players: getGamePlayers(playersIds),
     };
     this.gameState = gameState;
+  }
+
+  checkSleepGameState() {
+    let { gameState } = this;
+    if (gameState.state !== 'SLEEP') {
+      return;
+    }
+
+    let mafia = getMafia(gameState.players)!;
+    let doctor = getDoctor(gameState.players)!;
+    let officer = getOfficer(gameState.players)!;
+
+    let isSelectionEnd = mafia.select && doctor.select && officer.select;
+    if (!isSelectionEnd) {
+      return;
+    }
+
+    return {
+      killHappened: mafia.select !== doctor.select,
+      officerKnows: mafia.id === officer.select,
+    };
+  }
+
+  kill(playerId: string) {
+    let { gameState } = this;
+    if (gameState.state === 'IDLE') {
+      return;
+    }
+    let player = gameState.players.find(player => player.id === playerId);
+    if (!player) {
+      return;
+    }
+    player.isDead = true;
+    return player;
+  }
+
+  awakeGame(message: string) {
+    let { gameState } = this;
+    if (gameState.state === 'SLEEP') {
+      Object.assign(gameState, {
+        state: 'AWAKE',
+        message,
+        players: gameState.players.map(player => ({
+          ...player,
+          select: undefined,
+        })),
+      });
+    }
+  }
+
+  sleepGame(message: string) {
+    let { gameState } = this;
+    if (gameState.state === 'AWAKE') {
+      Object.assign(gameState, {
+        state: 'SLEEP',
+        message,
+        players: gameState.players.map(player => ({
+          ...player,
+          select: undefined,
+        })),
+      });
+    }
   }
 }

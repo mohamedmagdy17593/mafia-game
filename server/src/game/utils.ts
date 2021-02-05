@@ -17,8 +17,15 @@ export function creatPlayer({
   return player;
 }
 
+interface ClientGamePlayers {
+  id: string;
+  name: string;
+  avatarIndex: number;
+  isDead: boolean;
+}
+
 export function getClientRoomState(room: Room) {
-  console.log('room', room);
+  // console.log('room', room);
 
   let roomName = room.name;
 
@@ -29,19 +36,28 @@ export function getClientRoomState(room: Room) {
     };
   });
 
-  let gameState = room.gameState;
+  let gamePlayers: ClientGamePlayers[] | undefined;
+  if (room.gameState.state !== 'IDLE') {
+    gamePlayers = room.gameState.players.map(({ id, isDead, select }) => {
+      let player = room.players.find(player => player.id === id)!;
+      return {
+        ...player,
+        isDead,
+        ...(room.gameState.state === 'AWAKE' && {
+          select,
+        }),
+      };
+    });
+  }
 
-  // get game state
-  // let gamePlayers =
-  //   room.gameState?.players.map(gamePlayer => {
-  //     let player =
-  //       room.players.find(player => player.id === gamePlayer.id) ?? {};
-  //     return player;
-  //   }) ?? [];
-  // let game = {
-  //   ...room.game,
-  //   players: gamePlayers,
-  // };
+  let gameState = {
+    ...room.gameState,
+    ...(gamePlayers && { players: gamePlayers }),
+    ...((room.gameState.state === 'AWAKE' ||
+      room.gameState.state === 'SLEEP') && {
+      message: room.gameState.message,
+    }),
+  };
 
   return {
     roomName,
@@ -71,6 +87,7 @@ export function getGamePlayers(playersIds: string[]) {
   let players: GamePlayer[] = playersIds.map(id => {
     return {
       id,
+      isDead: false,
       role: 'CITIZEN',
     };
   });
@@ -83,4 +100,16 @@ export function getGamePlayers(playersIds: string[]) {
   player3.role = 'OFFICER';
 
   return players;
+}
+
+export function getMafia(players: GamePlayer[]) {
+  return players.find(player => player.role === 'MAFIA');
+}
+
+export function getDoctor(players: GamePlayer[]) {
+  return players.find(player => player.role === 'DOCTOR');
+}
+
+export function getOfficer(players: GamePlayer[]) {
+  return players.find(player => player.role === 'OFFICER');
 }
