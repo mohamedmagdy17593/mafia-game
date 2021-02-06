@@ -81,7 +81,10 @@ export class Room {
     let doctor = getDoctor(gameState.players)!;
     let officer = getOfficer(gameState.players)!;
 
-    let isSelectionEnd = mafia.select && doctor.select && officer.select;
+    let isSelectionEnd =
+      (mafia.isDead || mafia.select) &&
+      (doctor.isDead || doctor.select) &&
+      (officer.isDead || officer.select);
     if (!isSelectionEnd) {
       return;
     }
