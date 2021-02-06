@@ -133,6 +133,7 @@ function gameHandlers(io: Server, socket: Socket) {
                 io.to(roomName).emit(
                   'game:end',
                   `City win 😃, ${mafiaName} is the mafia`,
+                  room.name,
                 );
               } else {
                 let undeadPlayersLength = undeadPlayers.length - 1;
@@ -141,6 +142,7 @@ function gameHandlers(io: Server, socket: Socket) {
                   io.to(roomName).emit(
                     'game:end',
                     `Mafia win ☠️, ${mafiaName} is the mafia`,
+                    room.name,
                   );
                 } else {
                   // cont.

@@ -18,8 +18,10 @@ function Game() {
   let { gameState } = room!;
 
   useEffect(() => {
-    let handler = (message: string) => {
-      setEndGameMessage(message);
+    let handler = (message: string, serverRoomName: string) => {
+      if (serverRoomName === roomName) {
+        setEndGameMessage(message);
+      }
     };
     socket.on('game:end', handler);
     return () => {
