@@ -63,7 +63,7 @@ function roomHandlers(io: Server, socket: Socket) {
       room.addPlayer(player);
       // add this user to app users
       if (!token) {
-        token = UserManager.createUser();
+        [token] = UserManager.createUser();
       }
       UserManager.addRoomToUser({ userRoomId: player.id, roomName, token });
 

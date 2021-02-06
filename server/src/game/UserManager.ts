@@ -10,11 +10,6 @@ interface User {
   rooms: UserRoom[]; // array of rooms ids
 }
 
-interface CreateUserArg {
-  roomName: string;
-  userRoomId: string;
-}
-
 interface GetUserRoomArg {
   token: string;
   roomName: string;
@@ -29,19 +24,21 @@ interface AddRoomToUserArg {
 class UserManager {
   users: User[] = [];
 
-  createUser() {
-    let token = nanoid();
+  createUser(token?: string) {
+    if (!token) {
+      token = nanoid();
+    }
     let user: User = { token, rooms: [] };
     this.users.push(user);
-    return token;
+    return [token, user] as [string, User];
   }
 
   addRoomToUser({ roomName, userRoomId, token }: AddRoomToUserArg) {
     let user = this.users.find(user => user.token === token);
     if (!user) {
-      return;
+      [, user] = this.createUser(token);
     }
-    user.rooms.push({ roomName, userRoomId });
+    user!.rooms.push({ roomName, userRoomId });
   }
 
   getUserRoom({ token, roomName }: GetUserRoomArg) {
