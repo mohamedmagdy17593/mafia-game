@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 
 import { Button } from 'antd';
-import { useRoom } from 'components/Room.tsx/Room';
+import { useRoom } from 'components/Room/Room';
+import { socket } from 'utils/socket';
 
 interface EndGameMessageProps {
   message: string;
 }
 function EndGameMessage({ message }: EndGameMessageProps) {
-  let { me } = useRoom();
+  let { me, roomName } = useRoom();
 
   return (
     <div>
@@ -16,7 +17,14 @@ function EndGameMessage({ message }: EndGameMessageProps) {
       </div>
       {me?.isAdmin && (
         <div css={{ textAlign: 'center' }}>
-          <Button type="primary">Go back to room start screen</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              socket.emit('game:restart', { roomName });
+            }}
+          >
+            Go back to room start screen
+          </Button>
         </div>
       )}
     </div>

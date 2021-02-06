@@ -14,6 +14,10 @@ interface PlayerSelectPayload {
   selectedId: string;
 }
 
+interface GameRestartArg {
+  roomName: string;
+}
+
 function gameHandlers(io: Server, socket: Socket) {
   socket.on('game:myRole', ({ roomName, id }: MyRolePayload, cb) => {
     let room = RoomManger.getRoom(roomName);
@@ -114,20 +118,30 @@ function gameHandlers(io: Server, socket: Socket) {
               }
             }
 
-            console.log({ h, maxVoted, killedPlayer: killedPlayer! });
-
             if (h[maxVoted] === 1) {
               // kill the player
               killedPlayer!.isDead = true;
+
+              let mafiaPlayer = room.gameState.players.find(
+                player => player.role === 'MAFIA',
+              );
+              let mafiaName = room.getPlayer(mafiaPlayer!.id)?.name;
+
               // check for winner if not sleep
               if (killedPlayer!.role === 'MAFIA') {
                 // city won
-                io.to(roomName).emit('game:end', 'City won 😃');
+                io.to(roomName).emit(
+                  'game:end',
+                  `City win 😃, ${mafiaName} is the mafia`,
+                );
               } else {
                 let undeadPlayersLength = undeadPlayers.length - 1;
                 if (undeadPlayersLength < 4) {
                   // city lose mafia win
-                  io.to(roomName).emit('game:end', 'Mafia won ☠️');
+                  io.to(roomName).emit(
+                    'game:end',
+                    `Mafia win ☠️, ${mafiaName} is the mafia`,
+                  );
                 } else {
                   // cont.
                   let name = room.getPlayer(killedPlayer!.id)?.name;
@@ -144,6 +158,16 @@ function gameHandlers(io: Server, socket: Socket) {
       }
     },
   );
+
+  socket.on('game:restart', ({ roomName }: GameRestartArg) => {
+    let room = RoomManger.getRoom(roomName);
+    console.log(roomName, room);
+    if (!room) {
+      return;
+    }
+    room.restart();
+    io.to(roomName).emit('room:state', getClientRoomState(room));
+  });
 }
 
 export default gameHandlers;

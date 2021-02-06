@@ -131,4 +131,10 @@ export class Room {
       });
     }
   }
+
+  restart() {
+    this.gameState = {
+      state: 'IDLE',
+    };
+  }
 }

@@ -3,7 +3,7 @@
 import { Button, Col, Row } from 'antd';
 import { useState } from 'react';
 import avatars from 'components/Avatars/Avatars';
-import { useRoom } from 'components/Room.tsx/Room';
+import { useRoom } from 'components/Room/Room';
 import { GamePlayersRoles } from 'types/game';
 import { SLEEPRoom } from 'types/room';
 import { socket } from 'utils/socket';

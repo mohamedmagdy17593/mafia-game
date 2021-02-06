@@ -2,7 +2,7 @@
 
 import { Alert, Button, Col, Avatar, Row, Tooltip } from 'antd';
 import avatars from 'components/Avatars/Avatars';
-import { useRoom } from 'components/Room.tsx/Room';
+import { useRoom } from 'components/Room/Room';
 import { GamePlayersRoles } from 'types/game';
 import { AWAKERoom } from 'types/room';
 import { socket } from 'utils/socket';
