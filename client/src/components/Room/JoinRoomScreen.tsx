@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
-import { Button, Card, Form, Input } from 'antd';
+import { Button, Card, Form, Input, Spin } from 'antd';
+import { useEffect, useRef, useState } from 'react';
 import { useRoom } from './Room';
 import { socket } from 'utils/socket';
 
@@ -10,12 +11,55 @@ interface FormValue {
 
 function JoinRoomScreen() {
   let { roomName, dispatch } = useRoom();
+  let [loading, setLoading] = useState(true);
+  let gameUserRef = useRef<any>();
+
+  useEffect(() => {
+    try {
+      let gameUser = window.localStorage.getItem('game:user');
+      let user = gameUser ? JSON.parse(gameUser) : null;
+      if (user) {
+        gameUserRef.current = user;
+        socket.emit(
+          'room:join',
+          { roomName, token: user.token },
+          (id: string | null, token: string) => {
+            if (!id) {
+              setLoading(false);
+              return;
+            }
+            dispatch({ type: 'SET_ME_ID', id });
+          },
+        );
+      } else {
+        setLoading(false);
+      }
+    } catch {
+      setLoading(false);
+    }
+  }, [dispatch, roomName]);
 
   function handleFinish(values: FormValue) {
     let { name } = values;
-    socket.emit('room:join', { roomName, userName: name }, (id: string) => {
-      dispatch({ type: 'SET_ME_ID', id });
-    });
+    let gameUser = window.localStorage.getItem('game:user');
+    let user = gameUser ? JSON.parse(gameUser) : null;
+    socket.emit(
+      'room:join',
+      { roomName, userName: name, token: user?.token },
+      (id: string, token: string) => {
+        dispatch({ type: 'SET_ME_ID', id });
+        let gameUser = JSON.stringify({ token, name });
+        window.localStorage.setItem('game:user', gameUser);
+      },
+    );
+  }
+
+  if (loading) {
+    return (
+      <Spin>
+        <div css={{ height: '100vh', width: '100%' }}></div>
+      </Spin>
+    );
   }
 
   return (
@@ -28,7 +72,12 @@ function JoinRoomScreen() {
       }}
     >
       <Card css={{ width: '100%', maxWidth: 300 }}>
-        <Form layout="vertical" onFinish={handleFinish} requiredMark={false}>
+        <Form
+          initialValues={{ name: gameUserRef.current?.name }}
+          layout="vertical"
+          onFinish={handleFinish}
+          requiredMark={false}
+        >
           <Form.Item
             name="name"
             label="Name"

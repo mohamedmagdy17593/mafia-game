@@ -25,8 +25,6 @@ interface ClientGamePlayers {
 }
 
 export function getClientRoomState(room: Room) {
-  // console.log('room', room);
-
   let roomName = room.name;
 
   let players = room.players.map(player => {

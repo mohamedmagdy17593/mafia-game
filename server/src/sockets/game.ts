@@ -161,7 +161,6 @@ function gameHandlers(io: Server, socket: Socket) {
 
   socket.on('game:restart', ({ roomName }: GameRestartArg) => {
     let room = RoomManger.getRoom(roomName);
-    console.log(roomName, room);
     if (!room) {
       return;
     }
