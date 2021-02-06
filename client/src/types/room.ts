@@ -2,6 +2,7 @@ export interface Player {
   id: string;
   name: string;
   isAdmin: boolean;
+  connect: boolean;
   avatarIndex: number;
 }
 

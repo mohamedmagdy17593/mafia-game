@@ -21,6 +21,10 @@ interface AddRoomToUserArg {
   token: string;
 }
 
+interface GetUserRoomsArg {
+  token: string;
+}
+
 class UserManager {
   users: User[] = [];
 
@@ -51,6 +55,11 @@ class UserManager {
       return;
     }
     return room;
+  }
+
+  getUser({ token }: GetUserRoomsArg) {
+    let user = this.users.find(user => user.token === token);
+    return user;
   }
 }
 

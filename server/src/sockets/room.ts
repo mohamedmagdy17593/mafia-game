@@ -25,7 +25,7 @@ interface GameStartPayload {
   roomName: string;
 }
 
-function roomHandlers(io: Server, socket: Socket) {
+function roomHandlers(io: Server, socket: Socket & { token?: string }) {
   socket.on('room:create', cb => {
     let roomName = getRoomName();
     RoomManger.createRoom(roomName);
@@ -43,6 +43,13 @@ function roomHandlers(io: Server, socket: Socket) {
       if (token) {
         let userRoom = UserManager.getUserRoom({ token, roomName });
         if (userRoom) {
+          let player = room.players.find(
+            player => player.id === userRoom?.userRoomId,
+          );
+          if (player) {
+            player.connect = true;
+          }
+          socket.token = token;
           await socket.join(roomName);
           io.to(roomName).emit('room:state', getClientRoomState(room));
           return cb(userRoom.userRoomId, token);
@@ -68,6 +75,7 @@ function roomHandlers(io: Server, socket: Socket) {
       UserManager.addRoomToUser({ userRoomId: player.id, roomName, token });
 
       // join to the socket room
+      socket.token = token;
       await socket.join(roomName);
       io.to(roomName).emit('room:state', getClientRoomState(room));
       cb(player.id, token);

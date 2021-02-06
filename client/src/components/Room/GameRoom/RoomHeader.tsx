@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { Divider, Space, Typography } from 'antd';
+import { Badge, Divider, Space, Typography } from 'antd';
 import { useRoom } from '../Room';
 import { mq } from 'utils/styles';
 
@@ -47,21 +47,27 @@ function RoomHeader() {
           .join(', ');
         let tags = tagsText && `(${tagsText})`;
         return (
-          <span
+          <Badge
             key={player.id}
-            css={{
-              display: 'inline-block',
-              margin: 4,
-              padding: 4,
-              border: `1px solid var(--white)`,
-              borderRadius: 2,
-              '.ant-tag:last-child': {
-                marginRight: 0,
-              },
-            }}
+            dot
+            color={player.connect ? 'green' : 'red'}
+            offset={[-5, 5]}
           >
-            {player.name} {tags && <Text type="secondary">{tags}</Text>}
-          </span>
+            <span
+              css={{
+                display: 'inline-block',
+                margin: 4,
+                padding: 4,
+                border: `1px solid var(--white)`,
+                borderRadius: 2,
+                '.ant-tag:last-child': {
+                  marginRight: 0,
+                },
+              }}
+            >
+              {player.name} {tags && <Text type="secondary">{tags}</Text>}
+            </span>
+          </Badge>
         );
       })}
     </div>

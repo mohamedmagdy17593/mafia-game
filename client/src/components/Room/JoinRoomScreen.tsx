@@ -40,18 +40,20 @@ function JoinRoomScreen() {
   }, [dispatch, roomName]);
 
   function handleFinish(values: FormValue) {
-    let { name } = values;
-    let gameUser = window.localStorage.getItem('game:user');
-    let user = gameUser ? JSON.parse(gameUser) : null;
-    socket.emit(
-      'room:join',
-      { roomName, userName: name, token: user?.token },
-      (id: string, token: string) => {
-        dispatch({ type: 'SET_ME_ID', id });
-        let gameUser = JSON.stringify({ token, name });
-        window.localStorage.setItem('game:user', gameUser);
-      },
-    );
+    try {
+      let { name } = values;
+      let gameUser = window.localStorage.getItem('game:user');
+      let user = gameUser ? JSON.parse(gameUser) : null;
+      socket.emit(
+        'room:join',
+        { roomName, userName: name, token: user?.token },
+        (id: string, token: string) => {
+          dispatch({ type: 'SET_ME_ID', id });
+          let gameUser = JSON.stringify({ token, name });
+          window.localStorage.setItem('game:user', gameUser);
+        },
+      );
+    } catch {}
   }
 
   if (loading) {

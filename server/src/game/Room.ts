@@ -6,6 +6,7 @@ export interface Player {
   id: string;
   name: string;
   avatarIndex: number;
+  connect: boolean;
 }
 
 export type GamePlayersRoles = 'MAFIA' | 'DOCTOR' | 'OFFICER' | 'CITIZEN';

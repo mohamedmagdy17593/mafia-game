@@ -13,6 +13,7 @@ export function creatPlayer({
     id: nanoid(),
     name,
     avatarIndex,
+    connect: true,
   };
   return player;
 }
